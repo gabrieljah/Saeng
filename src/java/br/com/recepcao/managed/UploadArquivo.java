@@ -6,12 +6,16 @@ package br.com.recepcao.managed;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import org.primefaces.event.CaptureEvent;
 import org.primefaces.event.FileUploadEvent;
 
 /**
@@ -23,7 +27,7 @@ public class UploadArquivo {
     private String caminho;
     private byte[] arquivo;
     private String nome;
-    
+     private String foto;
     public UploadArquivo() {
     }
 
@@ -73,11 +77,7 @@ public class UploadArquivo {
         } catch (Exception ex) {
             System.out.println("Erro no upload do arquivo" + ex);
         }
-    }
-    
-    public void gravar(){
-        
-        try {
+                try {
             
             FileOutputStream fos;
             fos = new FileOutputStream(this.caminho);
@@ -87,6 +87,29 @@ public class UploadArquivo {
         } catch (Exception ex) {
             Logger.getLogger(UploadArquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
     }
+    
+    
+   
+
+            
+    
+
+    /**
+     * @return the foto
+     */
+    public String getFoto() {
+        return foto;
+    }
+
+    /**
+     * @param foto the foto to set
+     */
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+    
+    
+    
+    
 }

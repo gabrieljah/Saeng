@@ -80,14 +80,12 @@ Tem Acesso?<h:selectOneRadio value="#{pessoaMB.pessoa.acesso}" style="font-weigh
     </ui:decorate>
     <p:dialog position="center" id="dialogWebcam" header="Caputrar Foto" widgetVar="dlgWebcam" height="300" width="380">  
         <div align="center">
-                    <p:photoCam widgetVar="pc" listener="#{photoCamBean.oncapture}" update="photos"/>  
-                    <br/>
-         <p:commandButton value="Capturar Foto" onclick="pc.capture()" style="font-size: 13px; color: #363636 ; font-weight: bold "/>    
-        <p:imageSwitch effect="zoom" id="photos">  
-            <ui:repeat value="#{photoCamBean.photos}" var="photo">  
-                <p:graphicImage value="/photocam/#{photo}.jpg" />  
-            </ui:repeat>  
-        </p:imageSwitch>  
+            <p:photoCam widgetVar="pc" listener="#{pessoaMB.onCapture}" />
+                <br />
+                <p:commandButton type="button" value="Capturar"
+                    onclick="pc.capture()">
+                    <p:ajax oncomplete="dlgWebcam.hide();" />
+                </p:commandButton>
 </div>
     </p:dialog>  
 </html>

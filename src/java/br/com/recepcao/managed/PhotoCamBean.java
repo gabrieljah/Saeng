@@ -1,59 +1,117 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.recepcao.managed;
 
+
+import br.com.recepcao.dao.PessoaDaoImpl;
+import br.com.recepcao.model.Pessoa;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.Serializable;
 import javax.faces.FacesException;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.servlet.ServletContext;
 import org.primefaces.event.CaptureEvent;
 
-/**
- *
- * @author gabriel
- */
-public class PhotoCamBean {  
-     
-    private List<String> photos = new ArrayList<String>();  
-      
-    private String getRandomImageName() {  
-        int i = (int) (Math.random() * 10000000);  
-          
-        return String.valueOf(i);  
-    }  
-  
-    public List<String> getPhotos() {  
-        return photos;  
-    }      
-      
-    public void oncapture(CaptureEvent captureEvent) {  
-        String photo = getRandomImageName();  
-        this.getPhotos().add(0,photo);  
-        byte[] data = captureEvent.getData();  
-          
-        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();  
-        String newFileName = servletContext.getRealPath("") + File.separator + "photocam" + File.separator + photo + ".jpg";  
-          
-        FileImageOutputStream imageOutput;  
-        try {  
-            imageOutput = new FileImageOutputStream(new File(newFileName));  
-            imageOutput.write(data, 0, data.length);  
-            imageOutput.close();  
-        }  
-        catch(Exception e) {  
-            throw new FacesException("Error in writing captured image.");  
-        }  
-    }  
+ 
+@ManagedBean(name="photoMB")
+@SessionScoped
+public class PhotoCamBean implements Serializable {
+ 
+    private String nombre;
+    private int edad;
+    private String foto;
+    private Pessoa pessoa = new Pessoa();
+    private PessoaDaoImpl pessoaDAO = new PessoaDaoImpl();
+    
+    public PhotoCamBean(){
+        
+    }
+   
+    public void oncapture(CaptureEvent captureEvent) {
+ 
+        // obtenemos los datos de la foto como array de bytes
+        final byte[] datos = captureEvent.getData();
+ 
+        final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext()
+                .getContext();
+        // le asignamos el nombre que sea a la imagen (en este caso siempre el mismo)
+        this.foto = "foto.png";
+        // ruta destino de la imagen /photocam/foto.png
+        final String fileFoto = servletContext.getRealPath("") + File.separator  + File.separator + foto;
+ 
+        FileImageOutputStream outputStream = null;
+        try {
+            outputStream = new FileImageOutputStream(new File(fileFoto));
+            // guardamos la imagen
+            outputStream.write(datos, 0, datos.length);
+        } catch (IOException e) {
+            throw new FacesException("Error guardando la foto.", e);
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+ 
+    public void Salvar(){
+        pessoa.setFoto(foto);
+        pessoaDAO.salvar(pessoa);
+    }
+ 
+    public String getFoto() {
+        return foto;
+    }
+ 
+    public boolean isVerFoto() {
+        return foto != null;
+    }
+ 
+    public String getNombre() {
+        return nombre;
+    }
+ 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+ 
+    public int getEdad() {
+        return edad;
+    }
+ 
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
 
     /**
-     * @param photos the photos to set
+     * @return the pessoa
      */
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
+    public Pessoa getPessoa() {
+        return pessoa;
     }
-}  
+
+    /**
+     * @param pessoa the pessoa to set
+     */
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    /**
+     * @return the pessoaDAO
+     */
+    public PessoaDaoImpl getPessoaDAO() {
+        return pessoaDAO;
+    }
+
+    /**
+     * @param pessoaDAO the pessoaDAO to set
+     */
+    public void setPessoaDAO(PessoaDaoImpl pessoaDAO) {
+        this.pessoaDAO = pessoaDAO;
+    }
+ 
+}
