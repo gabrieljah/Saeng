@@ -1,0 +1,95 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui"
+xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:decorate template="/skin/padrao.xhtml">
+
+        <ui:define name="centro">
+            <p:panel header="Resultado da Busca" style="text-align: center; font-size: 16px">
+                    <h:form id="formResultado">
+                        <p:dataGrid style="font-size: 10px;" id="tbl"  value="#{pessoaMB.listarPessoas}"   
+                                    paginator="false" rows="2"  emptyMessage="Sem Registro Ou Não Existe."
+                      var="ps"  >
+                            <p:column style="text-align: center; font-size: 10px "> 
+                               
+                                <p:commandLink value="#{ps.nome}"  update="formcolab" style="color: #{colab.acesso eq 'Sim'? '#008B00' : '#FF0000'}"> 
+                                    <f:setPropertyActionListener value="#{ps}"      
+                                                                 target="#{pessoaMB.pessoa}" />      
+                                </p:commandLink>  
+                                <br/>
+
+                                <p:commandLink value="Visita" onclick="dlgvisita.show();" update="formcad" style="font-size: 12px"> 
+                                    <f:setPropertyActionListener value="#{ps}"      
+                                                                 target="#{pessoaMB.pessoa}" />      
+                                </p:commandLink> 
+                            </p:column>
+                        </p:dataGrid>
+                    </h:form> 
+                </p:panel>
+
+                <p:panel header="Lista de Visita" style="text-align: center; font-size: 16px">
+                    <h:form id="formLista">
+                        <p:dataTable style="font-size: 12px;" id="tbl"  value="#{pessoaMB.listarPessoas}"  paginator="true" rows="10"  emptyMessage="Sem Registros"
+                      var="psl" rowsPerPageTemplate="5,10,15">    
+                                     
+                            <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::NOME::.."/>
+                                </f:facet>
+                                <h:outputLabel value="#{psl.nome}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::DEPARTAMENTO::.."/>
+                                </f:facet>
+                                        <h:outputLabel value="#{psl.categoria}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::TELEFONE::.."/>
+                                </f:facet>
+                                        <h:outputLabel value="#{psl.telefone}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::DATA::.."/>
+                                </f:facet>
+                                        <h:outputLabel value="#{psl.rg}" /> 
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </h:form> 
+                </p:panel>
+        </ui:define>
+
+  <ui:define name="esquerda">
+            <h:form>
+                <div align="center">
+
+                    <br/>
+                    <h:outputText  value="BUSQUE PELO RG:" style=" font-size: 15px; color: #FF8C00; font-weight: bold"/>
+                    <p:inputText id="buscaNome"  size="17" style="font-size: 13px; color: #363636 ; font-weight: bold "/> <br/>
+
+
+                    <p:commandButton value="Pesquisar" style="font-size: 13px; color: #363636 ; font-weight: bold " update="formTabela" ajax="false" /> <br/>
+                    <h:outputText value="Pesquisa em branco listará todos" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+
+                    <h:outputText value="________________________________" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+                    <br/>
+                    <p:commandButton value="Cadastar Novo" action="cadastro.jsf" ajax="false" update="formcad" style="font-size: 13px; color: #363636 ; font-weight: bold "/>    
+
+                </div> 
+
+            </h:form>
+
+        </ui:define>
+
+              
+    </ui:decorate>
+
+</html>
+

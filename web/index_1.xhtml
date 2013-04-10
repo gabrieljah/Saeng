@@ -1,0 +1,286 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui" 
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="skin/jquery-ui-1.7.3.custom.css" type="text/css" />
+
+        <title>Aplicações Saeng Engenharia</title>
+
+    </h:head>
+    <h:body>
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="top" height="100">
+                <div align="right">
+                    <h:outputLabel value="Desenv. por: Gabriel Araujo" style="font-size: 12px; font-style: italic"/>
+
+
+                    <p:spacer width="15"/>
+                    <div align="center" >
+                        <p:graphicImage value="/skin/logo.png" width="240" height="60" />
+                    </div>
+                </div>
+            </p:layoutUnit>
+            <p:layoutUnit position="left" width="200" header="..:::Consulta:::.."  >
+
+                <h:form>
+                    <div align="center">
+
+                        <br/>
+                        <h:outputText  value="BUSQUE PELO RG:" style=" font-size: 15px; color: #FF8C00; font-weight: bold"/>
+                        <p:inputText id="buscaNome" value="#{colaboradorMB.nome}" size="17" style="font-size: 13px; color: #363636 ; font-weight: bold "/> <br/>
+
+
+                        <p:commandButton value="Pesquisar" action="#{colaboradorMB.consultaRG()}" actionListener="#{colaboradorMB.novo()}" style="font-size: 13px; color: #363636 ; font-weight: bold " update="formTabela" ajax="false" /> <br/>
+                        <h:outputText value="Pesquisa em branco listará todos" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+                        
+                        <h:outputText value="________________________________" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+                        <br/>
+                        <p:commandButton value="Nova Visita" action="#{colaboradorMB.novo()}" onclick="dlgnovo.show();" update="formcad" style="font-size: 13px; color: #363636 ; font-weight: bold "/>    
+
+                    </div> 
+
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" header="..:::Sistema de Controle de Acesso - Saeng Engenharia:::.." scrollable="true">
+
+                <p:panel header="Resultado da Busca" style="text-align: center; font-size: 16px">
+                    <h:form id="formResultado">
+                        <p:dataGrid style="font-size: 10px;" id="tbl"  value="#{colaboradorMB.listarColaboradores}"   
+                            paginator="false" rows="2"  
+                      var="colab"  >
+                            <p:column style="text-align: center; font-size: 10px "> 
+                               
+                                <p:commandLink value="#{colab.nome}"  update="formcolab" style="color: #{colab.acesso eq 'Sim'? '#008B00' : '#FF0000'}"> 
+                                    <f:setPropertyActionListener value="#{colab}"      
+                                                                 target="#{colaboradorMB.colaborador}" />      
+                                </p:commandLink>  
+                                <br/>
+
+                                <p:commandLink value="Visita" onclick="dlgvisita.show();" update="formcad" style="font-size: 12px"> 
+                                    <f:setPropertyActionListener value="#{colab}"      
+                                                                 target="#{colaboradorMB.colaborador}" />      
+                                </p:commandLink> 
+                            </p:column>
+                        </p:dataGrid>
+                    </h:form> 
+                </p:panel>
+
+                <p:panel header="Lista de Visita" style="text-align: center; font-size: 16px">
+                    <h:form id="formLista">
+                        <p:dataTable style="font-size: 12px;" id="tbl"  value="#{colaboradorMB.listarColaboradores}"  paginator="true" rows="10"  
+                      var="colab" rowsPerPageTemplate="5,10,15">    
+                                     
+                            <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::NOME::.."/>
+                                </f:facet>
+                                <h:outputLabel value="#{colab.nome}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::DEPARTAMENTO::.."/>
+                                </f:facet>
+                                <h:outputLabel value="#{colab.nome}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::TELEFONE::.."/>
+                                </f:facet>
+                                <h:outputLabel value="#{colab.nome}" /> 
+                            </p:column>
+                                    <p:column style="text-align: center; font-size: 12px "> 
+                                <f:facet name="header">
+                                    <h:outputText value="..::DATA::.."/>
+                                </f:facet>
+                                <h:outputLabel value="#{colab.nome}" /> 
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </h:form> 
+                </p:panel>
+
+
+                <p:dialog id="basicDialog2" width="550" height="400"  header="Nova Visita..." widgetVar="dlgvisita" hideEffect="explode" showEffect="explode" resizable="false">  
+
+
+                    <h:form id="formvisita">
+                        <div align="left">
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Nome" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="92"/>
+                            <p:inputText id="nome"  value="#{colaboradorMB.colaborador.nome}" label="Nome" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="nome" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="RH" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="110"/>
+                            <p:inputText id="rg"  value="#{colaboradorMB.colaborador.rg}" label="Rg" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="rg" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Categoria " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+
+                            <p:spacer height="20"  width="70"/>
+                            <h:selectOneMenu id="categoria" value="#{colaboradorMB.colaborador.categoria}" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" >
+                                <f:selectItem itemLabel=" " itemValue=" "/>
+                                <f:selectItem itemLabel="Compras" itemValue="Compras"/>
+                                <f:selectItem itemLabel="Diretoria" itemValue="Diretoria"/>
+                                <f:selectItem itemLabel="Engenharia" itemValue="Engenharia"/>
+                                <f:selectItem itemLabel="Financeiro" itemValue="Financeiro"/>
+                                <f:selectItem itemLabel="Marketing" itemValue="Marketing"/>
+                                <f:selectItem itemLabel="Orçamentos" itemValue="Orçamentos"/>
+                                <f:selectItem itemLabel="Planejamento" itemValue="Planejamento"/>
+                                <f:selectItem itemLabel="RH" itemValue="RH"/>
+                                <f:selectItem itemLabel="TI/Sienge" itemValue="TI"/>
+                                <f:selectItem itemLabel="Empresas" itemValue="Empresas"/>
+                                <f:selectItem itemLabel="Outros/Administrativo" itemValue="Outros"/>
+                            </h:selectOneMenu>
+                            <p:message for="categoria" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Data " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="40"/>
+                            <p:inputText id="data" value="#{agendaMB.agenda.data}" label="Departamento" size="50" maxlength="49"   style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="data" />   
+
+                            <h:panelGrid columns="3">
+                                <p:fileUpload id="upload" update="foto" label="Foto" 
+                                              fileUploadListener="#{colaboradorMB.uploadAction}" auto="true"/>
+                                <p:spacer height="20"  width="250"/>
+                                <p:commandButton value="Salvar" action="#{agendaMB.salvar()}" style="font-size: 16px; color: #363636 ; font-weight: bold " ajax="false"/>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+
+                </p:dialog>
+
+
+                <p:dialog id="basicDialog" width="550" height="400"  header="Cadastrar Novo..." widgetVar="dlgnovo" hideEffect="explode" showEffect="explode" resizable="false">  
+
+
+                    <h:form id="formcad">
+                        <div align="left">
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Nome" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="92"/>
+                            <p:inputText id="nome"  value="#{ colaboradorMB.colaborador.nome}" label="Nome" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="nome" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="RG" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="110"/>
+                            <p:inputText id="rg"  value="#{ colaboradorMB.colaborador.rg}" label="Rg" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="rg" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Categoria " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+
+                            <p:spacer height="20"  width="70"/>
+                            <h:selectOneMenu id="categoria" value="#{colaboradorMB.colaborador.categoria}" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" >
+                                <f:selectItem itemLabel=" " itemValue=" "/>
+                                <f:selectItem itemLabel="Compras" itemValue="Compras"/>
+                                <f:selectItem itemLabel="Diretoria" itemValue="Diretoria"/>
+                                <f:selectItem itemLabel="Engenharia" itemValue="Engenharia"/>
+                                <f:selectItem itemLabel="Financeiro" itemValue="Financeiro"/>
+                                <f:selectItem itemLabel="Marketing" itemValue="Marketing"/>
+                                <f:selectItem itemLabel="Orçamentos" itemValue="Orçamentos"/>
+                                <f:selectItem itemLabel="Planejamento" itemValue="Planejamento"/>
+                                <f:selectItem itemLabel="RH" itemValue="RH"/>
+                                <f:selectItem itemLabel="TI/Sienge" itemValue="TI"/>
+                                <f:selectItem itemLabel="Empresas" itemValue="Empresas"/>
+                                <f:selectItem itemLabel="Outros/Administrativo" itemValue="Outros"/>
+                            </h:selectOneMenu>
+                            <p:message for="categoria" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Departamento " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="40"/>
+                            <p:inputText id="departamento" value="#{colaboradorMB.colaborador.departamento}" label="Departamento" size="50" maxlength="49"   style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="departamento" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="E-mail " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="85"/>
+                            <p:inputText id="email" value="#{colaboradorMB.colaborador.email}" label="email" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="email" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Ramal " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="85"/>
+                            <p:inputText id="ramal" value="#{colaboradorMB.colaborador.ramal}" label="ramal" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="ramal" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Celular " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <p:spacer height="20"  width="80"/>
+                            <p:inputText id="celular" value="#{colaboradorMB.colaborador.celular}" label="Celular" size="50" maxlength="49"    style="font-familly: Tahoma;font-size:12px;"/>
+                            <p:message for="celular" />   
+
+                            <p:spacer height="20"  width="15"/>
+                            <h:outputLabel value="Tem Acesso? " style="font-weight:bold; font-familly: Tahoma;font-size:12px;" />
+                            <h:selectOneRadio value="#{colaboradorMB.colaborador.acesso}" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" >
+                                <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+                                <f:selectItem itemLabel="Não" itemValue="Não"/>
+
+                            </h:selectOneRadio>
+
+                            <h:panelGrid columns="3">
+                                <p:fileUpload id="upload" update="foto" label="Foto" 
+                                              fileUploadListener="#{colaboradorMB.uploadAction}" auto="true"/>
+                                <p:spacer height="20"  width="250"/>
+                                <p:commandButton value="Salvar" action="#{colaboradorMB.salvar()}" style="font-size: 16px; color: #363636 ; font-weight: bold " ajax="false"/>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+
+                </p:dialog>
+
+            </p:layoutUnit>
+            <p:layoutUnit position="right" style="background: #363636; color: #eeeeee" width="350" header="..:::Colaborador:::.."  >
+                <p:spacer width="20" height="15"/>
+
+                <h:form id="formcolab">
+                    <div align="center">
+
+                        <h:graphicImage value="./image/#{colaboradorMB.colaborador.foto}" height="250" width="200"/> <br/>
+
+                        <h:outputLabel id="nome"  value="#{colaboradorMB.colaborador.nome}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="nome" />   
+
+                        <h:outputLabel id="rg"  value="#{colaboradorMB.colaborador.rg}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="rg" /> 
+
+                        <h:outputLabel id="departamento"  value="#{colaboradorMB.colaborador.departamento}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="departamento" />   
+
+                        <h:outputLabel id="email"  value="#{colaboradorMB.colaborador.email}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="email" />   
+
+                        <h:outputLabel id="ramal"  value="#{colaboradorMB.colaborador.ramal}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="ramal" />   
+
+                        <h:outputLabel id="celular"  value="#{colaboradorMB.colaborador.celular}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="celular" />   
+
+
+                        <h:outputLabel value="#{colaboradorMB.colaborador.acesso eq 'Sim'? 'Tem acesso' : 'Sem acesso'}" /> 
+
+
+                    </div>       
+                </h:form>
+            </p:layoutUnit>
+
+
+        </p:layout>
+    </h:body>
+
+</html>
+

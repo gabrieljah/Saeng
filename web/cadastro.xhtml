@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:decorate template="/skin/padrao.xhtml">
+
+        <ui:define name="centro">
+
+            <h:form id="formcad">
+                <div align="left">
+
+                    <fieldset>
+                    <legend>Ficha de Cadastro</legend>
+                    <pre>
+Nome:     <p:inputText id="nome"  value="#{pessoaMB.pessoa.nome}" label="Nome" size="41"  style="font-familly: Tahoma;font-size:12px;"/>  RG: <p:inputText id="rg"  value="#{pessoaMB.pessoa.rg}" label="Rg" size="13" maxlength="12"    style="font-familly: Tahoma;font-size:12px;"/>
+                      <p:message for="nome" />
+Categoria:<h:selectOneMenu id="categoria" value="#{pessoaMB.pessoa.categoria}" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" >
+                                <f:selectItem itemLabel=" " itemValue=" "/>
+                                <f:selectItem itemLabel="Compras" itemValue="Compras"/>
+                                <f:selectItem itemLabel="Diretoria" itemValue="Diretoria"/>
+                                <f:selectItem itemLabel="Engenharia" itemValue="Engenharia"/>
+                                <f:selectItem itemLabel="Financeiro" itemValue="Financeiro"/>
+                                <f:selectItem itemLabel="Marketing" itemValue="Marketing"/>
+                                <f:selectItem itemLabel="Orçamentos" itemValue="Orçamentos"/>
+                                <f:selectItem itemLabel="Planejamento" itemValue="Planejamento"/>
+                                <f:selectItem itemLabel="RH" itemValue="RH"/>
+                                <f:selectItem itemLabel="TI/Sienge" itemValue="TI"/>
+                                <f:selectItem itemLabel="Empresas" itemValue="Empresas"/>
+                                <f:selectItem itemLabel="Outros/Administrativo" itemValue="Outros"/>
+                            </h:selectOneMenu>       Tipo:   <p:inputText id="tipo" value="#{pessoaMB.pessoa.tipo}" label="Tipo" size="20" maxlength="20"   style="font-familly: Tahoma;font-size:12px;"/>
+
+Telefone:  <p:inputText id="telefone" value="#{pessoaMB.pessoa.telefone}" label="telefone" size="11" maxlength="10"    style="font-familly: Tahoma;font-size:12px;"/>       
+<br></br>
+Tem Acesso?<h:selectOneRadio value="#{pessoaMB.pessoa.acesso}" style="font-weight:bold; font-familly: Tahoma;font-size:12px;" >
+                                <f:selectItem itemLabel="Sim" itemValue="Sim"/>
+                                <f:selectItem itemLabel="Não" itemValue="Não"/>
+                            </h:selectOneRadio><br/>
+  <h:panelGrid columns="3">
+ <p:fileUpload id="upload"  label="Foto" 
+               fileUploadListener="#{pessoaMB.uploadAction}" auto="true"/>
+<p:commandButton value="Capturar" onclick="dlgWebcam.show();" style="font-size: 16px; color: #363636 ; font-weight: bold " />  
+  
+<p:commandButton value="Salvar" action="#{pessoaMB.salvar()}" ajax="false">
+    
+</p:commandButton>
+  
+  </h:panelGrid>
+                    </pre>
+                    </fieldset>
+                </div>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="esquerda">
+            <h:form>
+                <div align="center">
+
+                    <br/>
+                    <h:outputText  value="EDIÇÃO" style=" font-size: 15px; color: #FF8C00; font-weight: bold"/><br></br>
+                    <h:outputText  value="BUSQUE PELO NOME:" style=" font-size: 15px; color: #FF8C00; font-weight: bold"/>
+                    <p:inputText id="buscaNome" size="17" style="font-size: 13px; color: #363636 ; font-weight: bold "/> <br/>
+
+                    <p:commandButton value="Pesquisar"  style="font-size: 13px; color: #363636 ; font-weight: bold " update="formTabela" ajax="false" /> <br/>
+                    <h:outputText value="Pesquisa em branco listará todos" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+
+                    <h:outputText value="________________________________" style="font-size: 10px; font-style: italic; color: #363636" /> <br/>
+                    <br/>
+                    <p:commandButton value="Voltar Para Visitas" action="index.jsf" ajax="false" update="formcad" style="font-size: 13px; color: #363636 ; font-weight: bold "/>    
+
+                </div> 
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:decorate>
+    <p:dialog position="center" id="dialogWebcam" header="Caputrar Foto" widgetVar="dlgWebcam" height="300" width="380">  
+        <div align="center">
+                    <p:photoCam widgetVar="pc" listener="#{photoCamBean.oncapture}" update="photos"/>  
+                    <br/>
+         <p:commandButton value="Capturar Foto" onclick="pc.capture()" style="font-size: 13px; color: #363636 ; font-weight: bold "/>    
+        <p:imageSwitch effect="zoom" id="photos">  
+            <ui:repeat value="#{photoCamBean.photos}" var="photo">  
+                <p:graphicImage value="/photocam/#{photo}.jpg" />  
+            </ui:repeat>  
+        </p:imageSwitch>  
+</div>
+    </p:dialog>  
+</html>
+

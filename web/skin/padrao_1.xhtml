@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <link rel="stylesheet" href="skin/jquery-ui-1.7.3.custom.css" type="text/css" />
+
+                <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Aplicações Saeng Engenharia</title>
+            </f:facet>
+
+            
+            <style type="text/css">
+                .ui-layout-north {
+                    z-index:20 !important;
+                    overflow:visible !important;;
+                }
+
+                .ui-layout-north .ui-layout-unit-content {
+                    overflow:visible !important;
+                }
+            </style>
+        </h:head>
+
+
+        <h:body>
+
+            <p:layout fullPage="true" >
+
+                <p:layoutUnit id="top" position="north" size="50">
+
+                    <div align="right">
+                        <h:outputLabel value="Desenv. por: Gabriel Araujo" style="font-size: 12px; font-style: italic"/>
+
+
+                        <p:spacer width="15"/>
+                        <div align="center" >
+                            <p:graphicImage value="/skin/logo.png" width="240" height="60" />
+                        </div>
+                    </div>
+                </p:layoutUnit>
+                
+                <p:layoutUnit id="left" position="west" size="300"  header="CONSULTA">
+
+                    <ui:insert name="esquerda">
+                        O que estiver aqui será substituido!
+                    </ui:insert>
+
+                </p:layoutUnit>
+
+
+
+                <p:layoutUnit id="right" position="east" size="250" header="Pessoa" resizable="true" closable="true" collapsible="true"
+                              style="text-align:center">
+
+     <ui:insert name="direita">
+                      <p:spacer width="20" height="15"/>
+
+                <h:form id="formcolab">
+                    <div align="center">
+
+                        <h:graphicImage value="./image/#{colaboradorMB.colaborador.foto}" height="250" width="200"/> <br/>
+
+                        <h:outputLabel id="nome"  value="#{colaboradorMB.colaborador.nome}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="nome" />   
+
+                        <h:outputLabel id="rg"  value="#{colaboradorMB.colaborador.rg}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="rg" /> 
+
+                        <h:outputLabel id="departamento"  value="#{colaboradorMB.colaborador.departamento}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="departamento" />   
+
+                        <h:outputLabel id="email"  value="#{colaboradorMB.colaborador.email}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="email" />   
+
+                        <h:outputLabel id="ramal"  value="#{colaboradorMB.colaborador.ramal}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="ramal" />   
+
+                        <h:outputLabel id="celular"  value="#{colaboradorMB.colaborador.celular}"  style="font-familly: Tahoma;font-size:16px;"/>
+                        <p:message for="celular" />   
+
+
+                        <h:outputLabel value="#{colaboradorMB.colaborador.acesso eq 'Sim'? 'Tem acesso' : 'Sem acesso'}" /> 
+
+
+                    </div>       
+                </h:form>
+                    </ui:insert>
+                </p:layoutUnit>
+
+                <p:layoutUnit id="center" position="center"  header="..:::Sistema de Controle de Acesso - Saeng Engenharia:::..">
+
+                    <ui:insert name="centro">
+                        O que estiver aqui será substituido!
+                    </ui:insert>
+
+
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+            <p:dialog header="Basic Dialog" widgetVar="dlg1" modal="true">
+                <h:outputText value="Resistance to PrimeFaces is futile!" />
+            </p:dialog>
+
+        </h:body>
+
+    </f:view>
+</html>
